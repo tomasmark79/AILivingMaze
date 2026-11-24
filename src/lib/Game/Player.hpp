@@ -24,9 +24,9 @@ namespace ailivingmaze::game {
   private:
     glm::vec3 position_{2.0F, 1.7F, 2.0F};
     float eyeHeight_ = 1.7F;
-    float radius_ = 0.52F;
-    float walkSpeed_ = 5.5F;
-    float sprintSpeed_ = 10.5F;
+    float radius_ = 0.55F;
+    float walkSpeed_ = 6.5F;
+    float sprintSpeed_ = 13.0F;
     render::Camera camera_{};
   };
 

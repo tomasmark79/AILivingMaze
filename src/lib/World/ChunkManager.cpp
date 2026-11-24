@@ -33,19 +33,19 @@ namespace ailivingmaze::world {
 
       // +Z face
       appendQuad(verts, {minP.x, minP.y, maxP.z}, {maxP.x, minP.y, maxP.z}, {maxP.x, maxP.y, maxP.z},
-                 {minP.x, maxP.y, maxP.z}, {0.0F, 0.0F, 1.0F}, {sx / kCellSize, sy / kWallHeight},
+                 {minP.x, maxP.y, maxP.z}, {0.0F, 0.0F, 1.0F}, {sx / kUvTileSize, sy / kUvTileSize},
                  chunkOrigin, 1.0F);
       // -Z face
       appendQuad(verts, {maxP.x, minP.y, minP.z}, {minP.x, minP.y, minP.z}, {minP.x, maxP.y, minP.z},
-                 {maxP.x, maxP.y, minP.z}, {0.0F, 0.0F, -1.0F}, {sx / kCellSize, sy / kWallHeight},
+                 {maxP.x, maxP.y, minP.z}, {0.0F, 0.0F, -1.0F}, {sx / kUvTileSize, sy / kUvTileSize},
                  chunkOrigin, 1.0F);
       // +X face
       appendQuad(verts, {maxP.x, minP.y, maxP.z}, {maxP.x, minP.y, minP.z}, {maxP.x, maxP.y, minP.z},
-                 {maxP.x, maxP.y, maxP.z}, {1.0F, 0.0F, 0.0F}, {sz / kCellSize, sy / kWallHeight},
+                 {maxP.x, maxP.y, maxP.z}, {1.0F, 0.0F, 0.0F}, {sz / kUvTileSize, sy / kUvTileSize},
                  chunkOrigin, 1.0F);
       // -X face
       appendQuad(verts, {minP.x, minP.y, minP.z}, {minP.x, minP.y, maxP.z}, {minP.x, maxP.y, maxP.z},
-                 {minP.x, maxP.y, minP.z}, {-1.0F, 0.0F, 0.0F}, {sz / kCellSize, sy / kWallHeight},
+                 {minP.x, maxP.y, minP.z}, {-1.0F, 0.0F, 0.0F}, {sz / kUvTileSize, sy / kUvTileSize},
                  chunkOrigin, 1.0F);
     }
   } // namespace
@@ -121,19 +121,20 @@ namespace ailivingmaze::world {
     chunk.maxBounds = origin + glm::vec3{kChunkWorldSize, kWallHeight, kChunkWorldSize};
 
     // Single floor quad and single ceiling quad for the whole chunk (tiled UVs)
+    const float surfaceTiles = kChunkWorldSize / kUvTileSize;
     const glm::vec3 f0{origin.x, 0.0F, origin.z};
     const glm::vec3 f1{origin.x + kChunkWorldSize, 0.0F, origin.z};
     const glm::vec3 f2{origin.x + kChunkWorldSize, 0.0F, origin.z + kChunkWorldSize};
     const glm::vec3 f3{origin.x, 0.0F, origin.z + kChunkWorldSize};
-    appendQuad(chunk.vertices, f0, f3, f2, f1, {0.0F, 1.0F, 0.0F},
-               {static_cast<float>(kChunkCells), static_cast<float>(kChunkCells)}, origin, 0.0F);
+    appendQuad(chunk.vertices, f0, f3, f2, f1, {0.0F, 1.0F, 0.0F}, {surfaceTiles, surfaceTiles},
+               origin, 0.0F);
 
     const glm::vec3 c0{origin.x, kWallHeight, origin.z};
     const glm::vec3 c1{origin.x + kChunkWorldSize, kWallHeight, origin.z};
     const glm::vec3 c2{origin.x + kChunkWorldSize, kWallHeight, origin.z + kChunkWorldSize};
     const glm::vec3 c3{origin.x, kWallHeight, origin.z + kChunkWorldSize};
-    appendQuad(chunk.vertices, c0, c1, c2, c3, {0.0F, -1.0F, 0.0F},
-               {static_cast<float>(kChunkCells), static_cast<float>(kChunkCells)}, origin, 2.0F);
+    appendQuad(chunk.vertices, c0, c1, c2, c3, {0.0F, -1.0F, 0.0F}, {surfaceTiles, surfaceTiles},
+               origin, 2.0F);
 
     const float halfT = kWallThickness * 0.5F;
 

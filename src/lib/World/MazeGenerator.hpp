@@ -8,9 +8,10 @@
 namespace ailivingmaze::world {
 
   constexpr int kChunkCells = 8;
-  constexpr float kCellSize = 4.0F;
-  constexpr float kWallHeight = 4.2F;
-  constexpr float kWallThickness = 0.45F;
+  constexpr float kCellSize = 9.0F;
+  constexpr float kWallHeight = 22.0F;
+  constexpr float kWallThickness = 1.2F;
+  constexpr float kUvTileSize = 4.0F;
   constexpr float kChunkWorldSize = static_cast<float>(kChunkCells) * kCellSize;
 
   enum WallMask : uint8_t {

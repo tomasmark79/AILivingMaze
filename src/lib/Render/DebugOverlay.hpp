@@ -23,6 +23,7 @@ namespace ailivingmaze::render {
     std::size_t activeShaders = 0;
     bool usingAIShaders = true;
     bool cursorCaptured = true;
+    bool invertMouseY = false;
     std::string aiProviderStatus;
     std::size_t pendingAIRequests = 0;
     double lastGenerationMs = 0.0;

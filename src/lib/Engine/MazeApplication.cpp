@@ -78,6 +78,7 @@ namespace ailivingmaze::engine {
 
     world::World world(config_.worldSeed, config_.chunkLoadRadius);
     game::Player player(world::World::defaultSpawnPosition());
+    player.camera().setInvertY(config_.invertMouseY);
     game::CollisionSystem collision(world);
     render::Renderer renderer;
     Input input;
@@ -133,6 +134,11 @@ namespace ailivingmaze::engine {
         materialManager.toggleShaderMode();
         log.infoStream() << "Shader mode switched to: "
                          << (materialManager.usingAIShaders() ? "AI-Generated" : "Default Fallback");
+      }
+      if (st.toggleInvertMouseY) {
+        player.camera().toggleInvertY();
+        log.infoStream() << "Vertical mouse inversion: "
+                         << (player.camera().isInvertY() ? "ON" : "OFF");
       }
 
       player.update(dt, st, collision);
@@ -193,6 +199,7 @@ namespace ailivingmaze::engine {
       hud.activeShaders = shaderManager.activeProgramCount();
       hud.usingAIShaders = materialManager.usingAIShaders();
       hud.cursorCaptured = window.isRelativeMouseMode();
+      hud.invertMouseY = player.camera().isInvertY();
       hud.aiProviderStatus = aiService.providerStatusString();
       hud.pendingAIRequests = aiService.pendingRequestCount();
       hud.lastGenerationMs = aiService.lastGenerationMs();

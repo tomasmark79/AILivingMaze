@@ -20,6 +20,7 @@ namespace ailivingmaze::engine {
     bool toggleDebugOverlay = false;
     bool requestNewShader = false;
     bool toggleShaderMode = false;
+    bool toggleInvertMouseY = false;
   };
 
   class Input {

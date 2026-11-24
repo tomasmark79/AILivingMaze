@@ -10,6 +10,7 @@ namespace ailivingmaze::engine {
     state_.toggleDebugOverlay = false;
     state_.requestNewShader = false;
     state_.toggleShaderMode = false;
+    state_.toggleInvertMouseY = false;
 
     const bool *keys = SDL_GetKeyboardState(nullptr);
     if (keys) {
@@ -55,6 +56,9 @@ namespace ailivingmaze::engine {
               break;
             case SDL_SCANCODE_F3:
               state_.toggleShaderMode = true;
+              break;
+            case SDL_SCANCODE_F4:
+              state_.toggleInvertMouseY = true;
               break;
             default:
               break;

@@ -150,7 +150,7 @@ void main() {
   float specDir = pow(max(dot(N, Hdir), 0.0), specPow) * mix(0.15, 0.85, metallic);
 
   // Player-carried atmospheric lantern light for maze readability
-  float atten = 1.0 / (1.0 + 0.045 * dist + 0.012 * dist * dist);
+  float atten = 1.0 / (1.0 + 0.025 * dist + 0.004 * dist * dist);
   float ndv = max(dot(N, V), 0.0);
   float specLamp = pow(ndv, specPow * 0.6) * 0.25;
 

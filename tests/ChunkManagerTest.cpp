@@ -1,4 +1,5 @@
 #include "Game/CollisionSystem.hpp"
+#include "Render/Camera.hpp"
 #include "World/ChunkManager.hpp"
 #include "World/World.hpp"
 
@@ -6,6 +7,7 @@
 
 using namespace ailivingmaze::world;
 using namespace ailivingmaze::game;
+using namespace ailivingmaze::render;
 
 TEST(ChunkManagerTest, DynamicallyLoadsAndUnloadsAroundPlayer) {
   MazeGenerator gen(1337ULL);
@@ -36,6 +38,7 @@ TEST(ChunkManagerTest, ChunkMeshesAreGeneratedWithBounds) {
   EXPECT_EQ(c->vertices.size() % 3U, 0U);
   EXPECT_FLOAT_EQ(c->minBounds.x, 0.0F);
   EXPECT_FLOAT_EQ(c->maxBounds.x, kChunkWorldSize);
+  EXPECT_FLOAT_EQ(c->maxBounds.y, kWallHeight);
 }
 
 TEST(CollisionSystemTest, BlocksMovementThroughSolidWall) {
@@ -70,4 +73,25 @@ TEST(CollisionSystemTest, BlocksMovementThroughSolidWall) {
   EXPECT_LT(resolved.x, kCellSize);
   EXPECT_GT(resolved.z, 0.0F);
   EXPECT_LT(resolved.z, kCellSize);
+}
+
+TEST(CameraTest, SupportsVerticalMouseInversion) {
+  Camera cam;
+  cam.setAngles(0.0F, 0.0F);
+  EXPECT_FALSE(cam.isInvertY());
+
+  // Moving mouse up (negative deltaY) looks up when not inverted
+  cam.addLookDelta(0.0F, -10.0F, 1.0F);
+  EXPECT_FLOAT_EQ(cam.pitch(), 10.0F);
+
+  cam.toggleInvertY();
+  EXPECT_TRUE(cam.isInvertY());
+
+  // Moving mouse up (negative deltaY) looks down when inverted
+  cam.addLookDelta(0.0F, -10.0F, 1.0F);
+  EXPECT_FLOAT_EQ(cam.pitch(), 0.0F);
+
+  // Pulling mouse down (positive deltaY) looks up when inverted
+  cam.addLookDelta(0.0F, 15.0F, 1.0F);
+  EXPECT_FLOAT_EQ(cam.pitch(), 15.0F);
 }

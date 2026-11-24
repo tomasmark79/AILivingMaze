@@ -15,6 +15,7 @@ namespace ailivingmaze::engine {
     int windowWidth = 1280;
     int windowHeight = 720;
     bool vsync = true;
+    bool invertMouseY = false;
     std::filesystem::path shaderCacheDir = ".cache/ailivingmaze/shaders";
     ai::AIConfig aiConfig{};
   };

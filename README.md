@@ -76,6 +76,7 @@ Všechny CLI volby zobrazí `./build/builddir-debug/AILivingMaze --help`.
 | `F1` | Zapnutí / vypnutí diagnostického overlaye |
 | `F2` | Okamžitý požadavek na nový AI shader pro aktuální sektor (hot reload) |
 | `F3` | Přepnutí mezi AI-generovaným shaderem a výchozím fallback shaderem |
+| `F4` | Zapnutí / vypnutí inverze vertikální osy myši (lze také zapnout parametrem `--invert-mouse-y`) |
 
 ## Dokumentace
 

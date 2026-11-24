@@ -26,7 +26,8 @@ namespace ailivingmaze::render {
 
   void Camera::addLookDelta(float deltaX, float deltaY, float sensitivity) noexcept {
     yaw_ += deltaX * sensitivity;
-    pitch_ = std::clamp(pitch_ - deltaY * sensitivity, -85.0F, 85.0F);
+    const float pitchDelta = invertY_ ? (deltaY * sensitivity) : (-deltaY * sensitivity);
+    pitch_ = std::clamp(pitch_ + pitchDelta, -85.0F, 85.0F);
   }
 
   glm::vec3 Camera::forward() const noexcept {

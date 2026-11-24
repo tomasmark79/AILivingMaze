@@ -22,6 +22,8 @@ int main(int argc, char **argv) {
         ("width", "Window width", cxxopts::value<int>()->default_value("1280"))
         ("height", "Window height", cxxopts::value<int>()->default_value("720"))
         ("no-vsync", "Disable VSync", cxxopts::value<bool>()->default_value("false"))
+        ("invert-mouse-y", "Invert vertical mouse look",
+         cxxopts::value<bool>()->default_value("false"))
         ("ai-provider", "AI provider: mock | openai | none",
          cxxopts::value<std::string>()->default_value("mock"))
         ("ai-endpoint", "OpenAI-compatible API endpoint URL",
@@ -63,6 +65,7 @@ int main(int argc, char **argv) {
     cfg.windowWidth = result["width"].as<int>();
     cfg.windowHeight = result["height"].as<int>();
     cfg.vsync = !result["no-vsync"].as<bool>();
+    cfg.invertMouseY = result["invert-mouse-y"].as<bool>();
     cfg.shaderCacheDir = result["cache-dir"].as<std::string>();
 
     cfg.aiConfig.providerType = result["ai-provider"].as<std::string>();

@@ -337,9 +337,10 @@ void main() {
     };
 
     std::vector<std::string> lines;
-    lines.push_back("AI LIVING MAZE  [F1 HUD | F2 New Shader | F3 AI/Default | ESC Mouse]");
+    lines.push_back("AI LIVING MAZE [F1 HUD | F2 Shader | F3 Mode | F4 InvY | ESC Mouse]");
     lines.push_back("FPS: " + fmt1(d.fps) + "  (" + fmt1(d.frameTimeMs) + " ms)" +
-                    (d.cursorCaptured ? "  [LOCKED]" : "  [CURSOR FREE - Click to lock]"));
+                    (d.cursorCaptured ? "  [LOCKED]" : "  [CURSOR FREE - Click to lock]") +
+                    (d.invertMouseY ? "  [InvY:ON]" : "  [InvY:OFF]"));
     lines.push_back("Pos: (" + fmt1(d.playerPos.x) + ", " + fmt1(d.playerPos.y) + ", " +
                     fmt1(d.playerPos.z) + ")  Chunk: (" + std::to_string(d.chunkX) + "," +
                     std::to_string(d.chunkZ) + ")");
