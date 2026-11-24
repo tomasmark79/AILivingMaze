@@ -4,6 +4,8 @@ Experimentální 3D engine v C++20 postavený na šabloně **NixonCpp** (Meson +
 
 > AI negeneruje jednotlivé snímky ani bitmapové textury — generuje programové definice povrchů (`evaluateSurface`) vykonávané přímo na GPU. Aplikace je plně funkční i zcela offline s vestavěným výchozím shaderem nebo s `MockAIProvider`.
 
+![AI Living Maze – ukázka běhu s procedurálními GLSL shadery a diagnostickým HUD](docs/screenshot.png)
+
 ## Klíčové vlastnosti MVP
 
 - **Nekonečné procedurální 3D bludiště** — deterministické generování chunků z world seedu s matematicky garantovanou vnitřní průchodností i symetrickými portály na hranicích chunků.
