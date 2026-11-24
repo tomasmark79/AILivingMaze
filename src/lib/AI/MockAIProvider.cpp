@@ -2,6 +2,7 @@
 
 #include <array>
 #include <chrono>
+#include <iomanip>
 #include <sstream>
 #include <thread>
 
@@ -16,6 +17,7 @@ namespace ailivingmaze::ai {
       const float phase = 1.37F * static_cast<float>(variationSeed);
 
       std::ostringstream oss;
+      oss << std::fixed << std::setprecision(4);
       oss << "// MockAIProvider archetype=" << archetype << " var=" << variationSeed << "\n";
       oss << "const float kFreq = " << freqScale << ";\n";
       oss << "const float kSpeed = " << speedScale << ";\n";
