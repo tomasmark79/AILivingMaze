@@ -86,7 +86,9 @@ namespace ailivingmaze::engine {
     render::Renderer renderer;
     Input input;
 
+#ifndef __EMSCRIPTEN__
     window.setRelativeMouseMode(true);
+#endif
 
     world.update(player.position());
     renderer.syncChunks(world.chunkManager());
@@ -130,6 +132,16 @@ namespace ailivingmaze::engine {
         window.updateDimensions();
         glViewport(0, 0, window.width(), window.height());
       }
+#ifdef __EMSCRIPTEN__
+      {
+        const int prevW = window.width();
+        const int prevH = window.height();
+        window.updateDimensions();
+        if (window.width() != prevW || window.height() != prevH) {
+          glViewport(0, 0, window.width(), window.height());
+        }
+      }
+#endif
       if (st.toggleCursorCapture) {
         window.setRelativeMouseMode(!window.isRelativeMouseMode());
       }

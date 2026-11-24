@@ -28,7 +28,7 @@ namespace ailivingmaze::engine {
 
     void swapBuffers();
     void setRelativeMouseMode(bool enabled);
-    [[nodiscard]] bool isRelativeMouseMode() const noexcept { return relativeMouse_; }
+    [[nodiscard]] bool isRelativeMouseMode() const noexcept;
 
     void updateDimensions();
     [[nodiscard]] int width() const noexcept { return width_; }

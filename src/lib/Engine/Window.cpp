@@ -104,6 +104,14 @@ namespace ailivingmaze::engine {
     }
   }
 
+  bool Window::isRelativeMouseMode() const noexcept {
+#ifdef __EMSCRIPTEN__
+    return window_ != nullptr && SDL_GetWindowRelativeMouseMode(window_);
+#else
+    return relativeMouse_;
+#endif
+  }
+
   void Window::updateDimensions() {
     if (!window_) {
       return;
