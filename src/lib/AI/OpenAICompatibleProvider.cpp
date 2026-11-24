@@ -4,11 +4,14 @@
 
 #include <chrono>
 #include <cstdlib>
+#ifndef __EMSCRIPTEN__
 #include <curl/curl.h>
+#endif
 #include <nlohmann/json.hpp>
 
 namespace ailivingmaze::ai {
 
+#ifndef __EMSCRIPTEN__
   namespace {
     std::size_t curlWriteCallback(char *ptr, std::size_t size, std::size_t nmemb, void *userdata) {
       auto *out = static_cast<std::string *>(userdata);
@@ -17,6 +20,7 @@ namespace ailivingmaze::ai {
       return total;
     }
   } // namespace
+#endif
 
   OpenAICompatibleProvider::OpenAICompatibleProvider(AIConfig config)
       : config_(std::move(config)) {}
@@ -35,10 +39,14 @@ namespace ailivingmaze::ai {
   }
 
   bool OpenAICompatibleProvider::isAvailable() const {
+#ifdef __EMSCRIPTEN__
+    return false;
+#else
     if (!config_.enabled || config_.endpoint.empty() || config_.model.empty()) {
       return false;
     }
     return isLocalEndpoint() || !readApiKeyFromEnv().empty();
+#endif
   }
 
   bool OpenAICompatibleProvider::extractGlslFromApiJson(const std::string &jsonBody,
@@ -74,18 +82,27 @@ namespace ailivingmaze::ai {
   }
 
   AIShaderResponse OpenAICompatibleProvider::generateShader(const ShaderPromptContext &ctx) {
+#ifndef __EMSCRIPTEN__
     const auto t0 = std::chrono::steady_clock::now();
+#endif
     AIShaderResponse res{};
     res.sectorId = ctx.theme.sectorId;
     res.promptUsed = buildStructuredShaderPrompt(ctx);
     res.modelUsed = config_.model;
 
     if (!isAvailable()) {
+#ifdef __EMSCRIPTEN__
+      res.errorMessage = "OpenAI-compatible HTTP provider is unavailable in WebAssembly builds";
+#else
       res.errorMessage = "OpenAI-compatible provider unavailable (missing env var " +
                          config_.apiKeyEnvVar + " or disabled)";
+#endif
       return res;
     }
 
+#ifdef __EMSCRIPTEN__
+    return res;
+#else
     nlohmann::json payload;
     payload["model"] = config_.model;
     payload["temperature"] = 0.75;
@@ -157,6 +174,7 @@ namespace ailivingmaze::ai {
     const auto t1 = std::chrono::steady_clock::now();
     res.generationMs = std::chrono::duration<double, std::milli>(t1 - t0).count();
     return res;
+#endif
   }
 
 } // namespace ailivingmaze::ai

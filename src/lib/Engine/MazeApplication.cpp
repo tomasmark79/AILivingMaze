@@ -15,6 +15,9 @@
 #include "World/World.hpp"
 
 #include <SDL3/SDL.h>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 #include <algorithm>
 #include <chrono>
 #include <cstdlib>
@@ -97,7 +100,7 @@ namespace ailivingmaze::engine {
     float smoothFrameMs = 16.6F;
 
     bool running = true;
-    while (running) {
+    auto runFrame = [&]() {
       const auto now = std::chrono::steady_clock::now();
       const float rawDt = std::chrono::duration<float>(now - prevTime).count();
       prevTime = now;
@@ -118,7 +121,10 @@ namespace ailivingmaze::engine {
       const auto &st = input.state();
       if (st.quitRequested) {
         running = false;
-        break;
+#ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+#endif
+        return;
       }
       if (st.windowResized) {
         window.updateDimensions();
@@ -211,7 +217,16 @@ namespace ailivingmaze::engine {
 
       debugOverlay.render(window.width(), window.height(), hud);
       window.swapBuffers();
+    };
+
+#ifdef __EMSCRIPTEN__
+    emscripten_set_main_loop_arg(
+        [](void *arg) { (*static_cast<decltype(runFrame) *>(arg))(); }, &runFrame, 0, true);
+#else
+    while (running) {
+      runFrame();
     }
+#endif
 
     aiService.stop();
     renderer.shutdown();

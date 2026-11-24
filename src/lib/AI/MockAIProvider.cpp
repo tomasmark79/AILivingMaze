@@ -303,9 +303,13 @@ SurfaceOutput evaluateSurface(SurfaceInput s) {
 
   AIShaderResponse MockAIProvider::generateShader(const ShaderPromptContext &ctx) {
     const auto t0 = std::chrono::steady_clock::now();
+#ifndef __EMSCRIPTEN__
     if (simulatedLatencyMs_ > 0) {
       std::this_thread::sleep_for(std::chrono::milliseconds(simulatedLatencyMs_));
     }
+#else
+    (void)simulatedLatencyMs_;
+#endif
 
     AIShaderResponse res{};
     res.sectorId = ctx.theme.sectorId;

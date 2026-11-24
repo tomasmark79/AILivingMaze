@@ -16,6 +16,54 @@ namespace ailivingmaze::render {
       return true;
     }
 
+#ifdef __EMSCRIPTEN__
+    GenVertexArrays = ::glGenVertexArrays;
+    DeleteVertexArrays = ::glDeleteVertexArrays;
+    BindVertexArray = ::glBindVertexArray;
+
+    GenBuffers = ::glGenBuffers;
+    DeleteBuffers = ::glDeleteBuffers;
+    BindBuffer = ::glBindBuffer;
+    BufferData = ::glBufferData;
+    BufferSubData = ::glBufferSubData;
+
+    EnableVertexAttribArray = ::glEnableVertexAttribArray;
+    VertexAttribPointer = ::glVertexAttribPointer;
+
+    CreateShader = ::glCreateShader;
+    DeleteShader = ::glDeleteShader;
+    ShaderSource = ::glShaderSource;
+    CompileShader = ::glCompileShader;
+    GetShaderiv = ::glGetShaderiv;
+    GetShaderInfoLog = ::glGetShaderInfoLog;
+
+    CreateProgram = ::glCreateProgram;
+    DeleteProgram = ::glDeleteProgram;
+    AttachShader = ::glAttachShader;
+    DetachShader = ::glDetachShader;
+    LinkProgram = ::glLinkProgram;
+    GetProgramiv = ::glGetProgramiv;
+    GetProgramInfoLog = ::glGetProgramInfoLog;
+    UseProgram = ::glUseProgram;
+
+    GetUniformLocation = ::glGetUniformLocation;
+    Uniform1i = ::glUniform1i;
+    Uniform1f = ::glUniform1f;
+    Uniform2f = ::glUniform2f;
+    Uniform3f = ::glUniform3f;
+    Uniform4f = ::glUniform4f;
+    UniformMatrix4fv = ::glUniformMatrix4fv;
+
+    ActiveTexture = ::glActiveTexture;
+    GenFramebuffers = ::glGenFramebuffers;
+    DeleteFramebuffers = ::glDeleteFramebuffers;
+    BindFramebuffer = ::glBindFramebuffer;
+    FramebufferTexture2D = ::glFramebufferTexture2D;
+    CheckFramebufferStatus = ::glCheckFramebufferStatus;
+
+    loaded = true;
+    return loaded;
+#else
     bool ok = true;
     ok &= loadProc(GenVertexArrays, "glGenVertexArrays");
     ok &= loadProc(DeleteVertexArrays, "glDeleteVertexArrays");
@@ -63,6 +111,7 @@ namespace ailivingmaze::render {
 
     loaded = ok;
     return loaded;
+#endif
   }
 
   GLFunctions &gl() {

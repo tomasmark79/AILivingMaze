@@ -7,8 +7,13 @@ namespace ailivingmaze::shader {
 
   inline constexpr const char *kShaderApiVersion = "1.0.0";
 
-  inline constexpr const char *kFixedVertexShader = R"GLSL(
-#version 330 core
+#ifdef __EMSCRIPTEN__
+#define AILIVINGMAZE_GLSL_HEADER "#version 300 es\nprecision highp float;\nprecision highp int;\n"
+#else
+#define AILIVINGMAZE_GLSL_HEADER "#version 330 core\n"
+#endif
+
+  inline constexpr const char *kFixedVertexShader = AILIVINGMAZE_GLSL_HEADER R"GLSL(
 
 layout(location = 0) in vec3 a_pos;
 layout(location = 1) in vec3 a_normal;
@@ -34,8 +39,7 @@ void main() {
 }
 )GLSL";
 
-  inline constexpr const char *kFragmentTemplateHeader = R"GLSL(
-#version 330 core
+  inline constexpr const char *kFragmentTemplateHeader = AILIVINGMAZE_GLSL_HEADER R"GLSL(
 
 in vec3 v_worldPos;
 in vec3 v_localPos;

@@ -16,11 +16,13 @@ namespace ailivingmaze::ai {
       return;
     }
     running_ = true;
+#ifndef __EMSCRIPTEN__
     const int workerCount = std::clamp(config_.maxParallelRequests, 1, 4);
     workers_.reserve(static_cast<std::size_t>(workerCount));
     for (int i = 0; i < workerCount; ++i) {
       workers_.emplace_back(&AIShaderService::workerLoop, this);
     }
+#endif
   }
 
   void AIShaderService::stop() {
@@ -32,6 +34,7 @@ namespace ailivingmaze::ai {
       running_ = false;
       queue_.clear();
     }
+#ifndef __EMSCRIPTEN__
     cv_.notify_all();
     for (auto &t : workers_) {
       if (t.joinable()) {
@@ -39,6 +42,7 @@ namespace ailivingmaze::ai {
       }
     }
     workers_.clear();
+#endif
   }
 
   void AIShaderService::requestSector(const world::SectorTheme &theme, bool forceRegenerate) {
@@ -75,6 +79,46 @@ namespace ailivingmaze::ai {
   }
 
   std::vector<AIShaderResponse> AIShaderService::pollCompleted() {
+#ifdef __EMSCRIPTEN__
+    Job job{};
+    bool hasJob = false;
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (running_ && !queue_.empty()) {
+        job = std::move(queue_.front());
+        queue_.pop_front();
+        hasJob = true;
+      }
+    }
+    if (hasJob) {
+      AIShaderResponse response{};
+      response.sectorId = job.ctx.theme.sectorId;
+      if (!job.forceRegenerate) {
+        if (auto cached = cache_.loadLatestForSector(job.ctx.theme.sectorId); cached.has_value()) {
+          response.success = true;
+          response.glslCode = std::move(cached->glslSource);
+          response.promptUsed = std::move(cached->prompt);
+          response.modelUsed = std::move(cached->aiModel);
+          response.generationMs = cached->generationMs;
+          response.fromCache = true;
+        }
+      }
+      if (!response.success) {
+        if (config_.enabled && provider_ && provider_->isAvailable()) {
+          response = provider_->generateShader(job.ctx);
+          if (response.success) {
+            lastGenerationMs_.store(response.generationMs);
+          }
+        } else {
+          response.success = false;
+          response.errorMessage = "AI provider offline; keeping default shader";
+        }
+      }
+      std::lock_guard<std::mutex> lock(mutex_);
+      inFlightSectors_.erase(job.ctx.theme.sectorId);
+      completed_.push_back(std::move(response));
+    }
+#endif
     std::lock_guard<std::mutex> lock(mutex_);
     std::vector<AIShaderResponse> out;
     out.swap(completed_);

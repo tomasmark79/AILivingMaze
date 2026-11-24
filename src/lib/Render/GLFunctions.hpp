@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef __EMSCRIPTEN__
+#include <GLES3/gl3.h>
+#else
 #include <GL/gl.h>
+#endif
 #include <cstddef>
 #include <cstdint>
 
@@ -56,9 +60,11 @@
 #define GL_RED 0x1903
 #endif
 
+#ifndef __EMSCRIPTEN__
 using GLchar = char;
 using GLsizeiptr = std::ptrdiff_t;
 using GLintptr = std::ptrdiff_t;
+#endif
 
 namespace ailivingmaze::render {
 

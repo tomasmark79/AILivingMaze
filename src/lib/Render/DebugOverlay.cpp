@@ -113,8 +113,13 @@ namespace ailivingmaze::render {
         {{0x10, 0x08, 0x08, 0x10, 0x08}}, // '~'
     }};
 
-    constexpr const char *kOverlayVs = R"GLSL(
-#version 330 core
+#ifdef __EMSCRIPTEN__
+#define AILIVINGMAZE_OVERLAY_GLSL_HEADER "#version 300 es\nprecision highp float;\n"
+#else
+#define AILIVINGMAZE_OVERLAY_GLSL_HEADER "#version 330 core\n"
+#endif
+
+    constexpr const char *kOverlayVs = AILIVINGMAZE_OVERLAY_GLSL_HEADER R"GLSL(
 layout(location = 0) in vec2 a_pos;
 layout(location = 1) in vec2 a_uv;
 layout(location = 2) in vec4 a_color;
@@ -136,8 +141,7 @@ void main() {
 }
 )GLSL";
 
-    constexpr const char *kOverlayFs = R"GLSL(
-#version 330 core
+    constexpr const char *kOverlayFs = AILIVINGMAZE_OVERLAY_GLSL_HEADER R"GLSL(
 in vec2 v_uv;
 in vec4 v_color;
 in float v_textured;

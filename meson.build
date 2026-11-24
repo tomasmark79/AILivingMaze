@@ -61,6 +61,12 @@ else
   if not cpp_compiler.has_header('cxxopts.hpp')
     error('cxxopts headers not found in the cross toolchain')
   endif
+  if not cpp_compiler.has_header('glm/glm.hpp')
+    error('glm headers not found in the cross toolchain')
+  endif
+  if is_wasm and not cpp_compiler.has_header('SDL3/SDL.h')
+    error('SDL3 headers not found in the Emscripten toolchain')
+  endif
 
   fmt_dep = declare_dependency()
   json_dep = declare_dependency()

@@ -24,6 +24,7 @@ pkgs.mkShell {
     fmt  # Will provide headers even if linking doesn't work
     nlohmann_json  # Header-only, works with Emscripten
     cxxopts  # Header-only
+    glm  # Header-only math library
   ];
   
   shellHook = ''
@@ -45,8 +46,8 @@ pkgs.mkShell {
     echo ""
     
     # Add include paths for dependencies
-    export CPLUS_INCLUDE_PATH="${pkgs.fmt.dev}/include:${pkgs.nlohmann_json}/include:${pkgs.cxxopts}/include:$CPLUS_INCLUDE_PATH"
-    export C_INCLUDE_PATH="${pkgs.fmt.dev}/include:${pkgs.nlohmann_json}/include:${pkgs.cxxopts}/include:$C_INCLUDE_PATH"
+    export CPLUS_INCLUDE_PATH="${pkgs.fmt.dev}/include:${pkgs.nlohmann_json}/include:${pkgs.cxxopts}/include:${pkgs.glm}/include:$CPLUS_INCLUDE_PATH"
+    export C_INCLUDE_PATH="${pkgs.fmt.dev}/include:${pkgs.nlohmann_json}/include:${pkgs.cxxopts}/include:${pkgs.glm}/include:$C_INCLUDE_PATH"
     
     echo "Build command:"
     echo "   make cross-wasm"
