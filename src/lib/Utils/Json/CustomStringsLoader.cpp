@@ -1,5 +1,5 @@
 #include "CustomStringsLoader.hpp"
-#include <fmt/core.h>
+#include <fmt/format.h>
 
 namespace ailivingmaze::utils {
 

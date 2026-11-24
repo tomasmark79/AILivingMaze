@@ -1,7 +1,7 @@
 #ifndef ILOGGER_HPP
 #define ILOGGER_HPP
 
-#include "fmt/core.h"
+#include <fmt/format.h>
 #include <cstdint>
 #include <memory>
 #include <sstream>

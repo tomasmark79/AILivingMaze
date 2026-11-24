@@ -13,7 +13,7 @@
 #include <string>
 #include <utility>
 
-#include "fmt/core.h"
+#include <fmt/format.h>
 
 #ifdef _WIN32
 #include <Utils/Platform/WindowsHeaders.hpp>

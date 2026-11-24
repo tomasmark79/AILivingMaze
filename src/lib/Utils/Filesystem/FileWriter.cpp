@@ -1,5 +1,5 @@
 #include "FileWriter.hpp"
-#include <fmt/core.h>
+#include <fmt/format.h>
 #include <fstream>
 #include <system_error>
 
